@@ -1,0 +1,283 @@
+swagger: '2.0'
+info:
+  description: >-
+    Cette API sert en tant que backend pour un site de création et partage de recettes.
+  version: 1.0.0
+  title: Recettes
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: cosmin.bilga@laplateforme.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: petstore.swagger.io
+basePath: /api
+tags:
+  - name: recette
+    description: Consultez et ajoutez des recettes
+  - name: auth
+    description: Authentification et connexion
+
+
+schemes:
+  - https
+  - http
+paths:
+  /api/recette:
+    get:
+      tags:
+        - recette
+      summary: recupère l'ensemble des recettes
+      produces:
+        - application/json
+      parameters:
+      responses:
+        '200':
+          description: Recuperation recettes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Recette'
+        '400':
+          description: Erreur
+    post:
+      tags:
+        - recette
+      summary: Ajouter une recette
+      description: ''
+      operationId: createRecette
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+        - in: formData
+          type: string
+          name: recette
+          description: 
+          required: true
+          schema:
+            $ref: '#/definitions/Recette'
+        - in: formData
+          name: image
+          description: image qui illustre la recette
+          required: true
+          type: file
+      responses:
+        '201':
+          description: Recette crée
+        '400':
+          description: Erreur création
+      security:
+        - api_key: 
+    put:
+      tags:
+        - recette
+      summary: Modifier une recette
+      description: ''
+      operationId: updateRecette
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+        - in: formData
+          type: string
+          name: recette
+          description: 
+          required: false
+          schema:
+            $ref: '#/definitions/Recette'
+        - in: formData
+          name: image
+          description: image qui illustre la recette
+          required: false
+          type: file
+      responses:
+        '201':
+          description: Recette modifiée
+        '400':
+          description: Erreur modification
+      security:
+        - api_key:
+  /api/recette/{id}:
+    get:
+      tags:
+        - recette
+      summary: Trouver une recette par id
+      description: Renvoie une recette
+      operationId: getRecetteById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Id de la recette a recupere
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: recette trouvée
+          schema:
+            $ref: '#/definitions/Recette'
+        '404':
+          description: Recette non trouvée
+    delete:
+      tags:
+        - recette
+      summary: Supprime une recette
+      description:
+      operationId: deleteRecette
+      parameters:
+        - name: id
+          in: path
+          description: Id de la recette a supprimer
+          required: true
+          type: integer
+          format: int64
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Suppresion effectuée
+        '400':
+          description: Erreur suppresion
+        '401':
+          description: Non-autorisé
+      security:
+        - api_key: []
+  /api/auth/signup:
+    post:
+      tags:
+        - auth
+      summary: Creation utilisateur
+      description:
+      operationId: createUtilisateur
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description:
+          required: true
+          schema:
+            $ref: '#/definitions/Utilisateur'
+      responses:
+        '201':
+          description: Utilisateur crée
+        '400':
+          description: Erreur création
+        '500':
+            description: Erreur serveur
+  /api/auth/login:
+    post:
+      tags:
+        - auth
+      summary: connexion utilisateur
+      description:
+      operationId: connectUtilisateur
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description:
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+      responses:
+        '201':
+          description: Utilisateur crée
+        '400':
+          description: Erreur création
+        '500':
+            description: Erreur serveur
+definitions:
+  Utilisateur:
+    type: object
+    required:
+      - name
+      - email
+      - password
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+  Commentaire:
+    type: object
+    required:
+      - author
+      - comment
+    properties:
+      comment:
+        type: string
+      author:
+        type: string
+      date:
+        type: string
+        format: date
+  Recette:
+    type: object
+    required:
+      - title
+      - ingredients
+      - steps
+      - author
+    properties:
+      title:
+        type: string
+      ingredients:
+        type: array
+        items: 
+          type: string
+      steps:
+        type: array
+        items:
+            type: string
+      author:
+        type: string
+      date:
+        type: string
+        format: date
+      imageUrl:
+        type: string
+        format: url
+      comments:
+        type: array
+        items: 
+          $ref: '#/definitions/Commentaire'
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: Authorization
+    in: header
+
+    

@@ -84,3 +84,18 @@ exports.deleteRecette = (req, res, next) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
+
+exports.createRecetteComment = (req, res, next) => {
+  Recette.updateOne(
+    { _id: req.params.id },
+    {
+      $push: {
+        comments: { comment: req.body.comment, author: req.auth.userId },
+      },
+    }
+  )
+    .then((recette) =>
+      res.status(200).json({ message: "Recette mise à jour!" })
+    )
+    .catch((error) => res.status(400).json({ error }));
+};

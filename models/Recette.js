@@ -13,6 +13,7 @@ const recetteSchema = mongoose.Schema({
   author: { type: String, required: true },
   date: { type: Date, default: Date.now },
   imageUrl: { type: String, default: "" },
+  comments: [{ type: commentaireSchema }],
 });
 
 module.exports = mongoose.model("Recette", recetteSchema);
