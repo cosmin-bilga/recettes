@@ -44,14 +44,17 @@ exports.updateRecette = (req, res, next) => {
           req.file.filename
         }`,
       }
-    : {
-        ...req.body,
-      };
+    : req.body.recette
+    ? {
+        ...JSON.parse(req.body.recette),
+      }
+    : { ...req.body };
 
+  //console.log(thingObject, req.params.id);
   delete thingObject._userId;
   Recette.findOne({ _id: req.params.id })
     .then((recette) => {
-      console.log(recette.author, "-", req.auth.userId);
+      //console.log(recette.author, "-", req.auth.userId);
       if (recette.author != req.auth.userId) {
         res.status(401).json({ message: "Non-autorisé" });
       } else {
@@ -94,8 +97,6 @@ exports.createRecetteComment = (req, res, next) => {
       },
     }
   )
-    .then((recette) =>
-      res.status(200).json({ message: "Recette mise à jour!" })
-    )
+    .then((recette) => res.status(200).json({ message: "Commentaire ajouté!" }))
     .catch((error) => res.status(400).json({ error }));
 };

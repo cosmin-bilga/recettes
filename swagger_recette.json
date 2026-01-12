@@ -10,8 +10,8 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-host: petstore.swagger.io
-basePath: /api
+host: localhost:3000
+basePath: /
 tags:
   - name: recette
     description: Consultez et ajoutez des recettes
@@ -20,7 +20,6 @@ tags:
 
 
 schemes:
-  - https
   - http
 paths:
   /api/recette:
@@ -107,7 +106,7 @@ paths:
         '400':
           description: Erreur modification
       security:
-        - api_key:
+        - api_key: []
   /api/recette/{id}:
     get:
       tags:
@@ -157,6 +156,44 @@ paths:
           description: Non-autorisé
       security:
         - api_key: []
+  /api/recette/{id}/comment:
+    post:
+      tags:
+        - recette
+      summary: Ajoute un commentaire à la recette
+      description:
+      operationId: createComment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Id de la recette a modifier
+          required: true
+          type: integer
+          format: int64
+        - in: body
+          description:
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - comment
+            properties:
+              comment:
+                type: string
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Commentaire ajouté!
+        '400':
+          description: Erreur.
   /api/auth/signup:
     post:
       tags:
@@ -250,7 +287,6 @@ definitions:
       - title
       - ingredients
       - steps
-      - author
     properties:
       title:
         type: string

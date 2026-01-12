@@ -10,7 +10,7 @@ router.get("/", recetteCtrl.getRecettes);
 
 router.get("/:id", recetteCtrl.getRecette);
 
-router.post("/id/comment", auth, recetteCtrl.createRecetteComment);
+router.post("/:id/comment", auth, recetteCtrl.createRecetteComment);
 
 router.put("/:id", auth, multer, recetteCtrl.updateRecette);
 
