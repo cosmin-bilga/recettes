@@ -25,7 +25,13 @@ exports.createRecette = (req, res, next) => {
 };
 
 exports.getRecettes = (req, res, next) => {
-  Recette.find()
+  let filters = {};
+  console.log(req.query.author, req.query.ingredients);
+  if (req.query.author) filters["author"] = req.query.author;
+  if (req.query.ingredients) filters["ingredients"] = req.query.ingredients;
+  console.log(filters);
+  Recette.find(filters)
+    .sort({ date: -1 })
     .then((things) => res.status(200).json(things))
     .catch((error) => res.status(400).json({ error }));
 };
