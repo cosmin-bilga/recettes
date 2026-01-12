@@ -1,4 +1,4 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   description: >-
     Cette API sert en tant que backend pour un site de création et partage de recettes.
@@ -17,8 +17,6 @@ tags:
     description: Consultez et ajoutez des recettes
   - name: auth
     description: Authentification et connexion
-
-
 schemes:
   - http
 paths:
@@ -26,24 +24,34 @@ paths:
     get:
       tags:
         - recette
-      summary: recupère l'ensemble des recettes
+      summary: recupère l'ensemble des recettes triées de plus recente à la plus ancienne
       produces:
         - application/json
       parameters:
+        - name: ingredients
+          in: query
+          description: Filtre les resultats par ingredients
+          required: false
+          type: string
+        - name: author
+          in: query
+          description: Filtre les resultats par auteur
+          required: false
+          type: string
       responses:
-        '200':
+        "200":
           description: Recuperation recettes
           schema:
             type: array
             items:
-              $ref: '#/definitions/Recette'
-        '400':
+              $ref: "#/definitions/Recette"
+        "400":
           description: Erreur
     post:
       tags:
         - recette
       summary: Ajouter une recette
-      description: ''
+      description: ""
       operationId: createRecette
       consumes:
         - multipart/form-data
@@ -57,56 +65,23 @@ paths:
         - in: formData
           type: string
           name: recette
-          description: 
+          description:
           required: true
           schema:
-            $ref: '#/definitions/Recette'
+            $ref: "#/definitions/Recette"
         - in: formData
           name: image
           description: image qui illustre la recette
           required: true
           type: file
       responses:
-        '201':
+        "201":
           description: Recette crée
-        '400':
+        "400":
           description: Erreur création
       security:
-        - api_key: 
-    put:
-      tags:
-        - recette
-      summary: Modifier une recette
-      description: ''
-      operationId: updateRecette
-      consumes:
-        - multipart/form-data
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: Authorization
-          required: true
-          type: string
-        - in: formData
-          type: string
-          name: recette
-          description: 
-          required: false
-          schema:
-            $ref: '#/definitions/Recette'
-        - in: formData
-          name: image
-          description: image qui illustre la recette
-          required: false
-          type: file
-      responses:
-        '201':
-          description: Recette modifiée
-        '400':
-          description: Erreur modification
-      security:
-        - api_key: []
+        - api_key:
+
   /api/recette/{id}:
     get:
       tags:
@@ -121,15 +96,53 @@ paths:
           in: path
           description: Id de la recette a recupere
           required: true
-          type: integer
-          format: int64
+          type: string
       responses:
-        '200':
+        "200":
           description: recette trouvée
           schema:
-            $ref: '#/definitions/Recette'
-        '404':
+            $ref: "#/definitions/Recette"
+        "404":
           description: Recette non trouvée
+    put:
+      tags:
+        - recette
+      summary: Modifier une recette
+      description: ""
+      operationId: updateRecette
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Id de la recette a modifier
+          required: true
+          type: string
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+        - in: formData
+          type: string
+          name: recette
+          description:
+          required: false
+          schema:
+            $ref: "#/definitions/Recette"
+        - in: formData
+          name: image
+          description: image qui illustre la recette
+          required: false
+          type: file
+      responses:
+        "201":
+          description: Recette modifiée
+        "400":
+          description: Erreur modification
+      security:
+        - api_key: []
     delete:
       tags:
         - recette
@@ -141,18 +154,17 @@ paths:
           in: path
           description: Id de la recette a supprimer
           required: true
-          type: integer
-          format: int64
+          type: string
         - in: header
           name: Authorization
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Suppresion effectuée
-        '400':
+        "400":
           description: Erreur suppresion
-        '401':
+        "401":
           description: Non-autorisé
       security:
         - api_key: []
@@ -172,8 +184,7 @@ paths:
           in: path
           description: Id de la recette a modifier
           required: true
-          type: integer
-          format: int64
+          type: string
         - in: body
           description:
           name: body
@@ -190,9 +201,9 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: Commentaire ajouté!
-        '400':
+        "400":
           description: Erreur.
   /api/auth/signup:
     post:
@@ -211,14 +222,14 @@ paths:
           description:
           required: true
           schema:
-            $ref: '#/definitions/Utilisateur'
+            $ref: "#/definitions/Utilisateur"
       responses:
-        '201':
+        "201":
           description: Utilisateur crée
-        '400':
+        "400":
           description: Erreur création
-        '500':
-            description: Erreur serveur
+        "500":
+          description: Erreur serveur
   /api/auth/login:
     post:
       tags:
@@ -247,12 +258,12 @@ paths:
               password:
                 type: string
       responses:
-        '201':
+        "201":
           description: Utilisateur crée
-        '400':
+        "400":
           description: Erreur création
-        '500':
-            description: Erreur serveur
+        "500":
+          description: Erreur serveur
 definitions:
   Utilisateur:
     type: object
@@ -292,12 +303,12 @@ definitions:
         type: string
       ingredients:
         type: array
-        items: 
+        items:
           type: string
       steps:
         type: array
         items:
-            type: string
+          type: string
       author:
         type: string
       date:
@@ -308,12 +319,10 @@ definitions:
         format: url
       comments:
         type: array
-        items: 
-          $ref: '#/definitions/Commentaire'
+        items:
+          $ref: "#/definitions/Commentaire"
 securityDefinitions:
   api_key:
     type: apiKey
     name: Authorization
     in: header
-
-    
