@@ -10,7 +10,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-host: localhost:3000
+host: cosminbilga.alwaysdata.net
 basePath: /
 tags:
   - name: recette
@@ -18,7 +18,7 @@ tags:
   - name: auth
     description: Authentification et connexion
 schemes:
-  - http
+  - https
 paths:
   /api/recette:
     get:

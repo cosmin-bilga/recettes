@@ -26,7 +26,7 @@ exports.createRecette = (req, res, next) => {
 
 exports.getRecettes = (req, res, next) => {
   let filters = {};
-  console.log(req.query.author, req.query.ingredients);
+  //console.log(req.query.author, req.query.ingredients);
   if (req.query.author) filters["author"] = req.query.author;
   if (req.query.ingredients) filters["ingredients"] = req.query.ingredients;
   console.log(filters);
