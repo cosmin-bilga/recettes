@@ -2,14 +2,14 @@ const Recette = require("../models/Recette");
 const fs = require("fs");
 
 exports.createRecette = (req, res, next) => {
-  console.log(req.body);
+  //console.log(req.body);
   const thingObject = JSON.parse(req.body.recette);
   delete thingObject._id;
   delete thingObject._userId;
 
-  console.log(
+  /* console.log(
     `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
-  );
+  ); */
 
   const thing = new Recette({
     ...thingObject,
@@ -29,7 +29,7 @@ exports.getRecettes = (req, res, next) => {
   //console.log(req.query.author, req.query.ingredients);
   if (req.query.author) filters["author"] = req.query.author;
   if (req.query.ingredients) filters["ingredients"] = req.query.ingredients;
-  console.log(filters);
+  //console.log(filters);
   Recette.find(filters)
     .sort({ date: -1 })
     .then((things) => res.status(200).json(things))
