@@ -2,13 +2,13 @@ const Recette = require("../models/Recette");
 const fs = require("fs");
 
 exports.createRecette = (req, res, next) => {
-  //console.log(req.body.thing);
+  console.log(req.body);
   const thingObject = JSON.parse(req.body.recette);
   delete thingObject._id;
   delete thingObject._userId;
 
   console.log(
-    `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+    `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
   );
 
   const thing = new Recette({
@@ -51,10 +51,10 @@ exports.updateRecette = (req, res, next) => {
         }`,
       }
     : req.body.recette
-    ? {
-        ...JSON.parse(req.body.recette),
-      }
-    : { ...req.body };
+      ? {
+          ...JSON.parse(req.body.recette),
+        }
+      : { ...req.body };
 
   //console.log(thingObject, req.params.id);
   delete thingObject._userId;
@@ -66,7 +66,7 @@ exports.updateRecette = (req, res, next) => {
       } else {
         Recette.updateOne(
           { _id: req.params.id },
-          { ...thingObject, _id: req.params.id }
+          { ...thingObject, _id: req.params.id },
         )
           .then(() => res.status(200).json({ message: "Recette modifié!" }))
           .catch((error) => res.status(400).json({ error }));
@@ -85,7 +85,7 @@ exports.deleteRecette = (req, res, next) => {
         fs.unlink(`images/${filename}`, () => {
           Recette.deleteOne({ _id: req.params.id })
             .then(() =>
-              res.status(200).json({ message: "Recette supprimée !" })
+              res.status(200).json({ message: "Recette supprimée !" }),
             )
             .catch((error) => res.status(400).json({ error }));
         });
@@ -101,7 +101,7 @@ exports.createRecetteComment = (req, res, next) => {
       $push: {
         comments: { comment: req.body.comment, author: req.auth.userId },
       },
-    }
+    },
   )
     .then((recette) => res.status(200).json({ message: "Commentaire ajouté!" }))
     .catch((error) => res.status(400).json({ error }));

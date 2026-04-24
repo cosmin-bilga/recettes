@@ -298,6 +298,7 @@ definitions:
       - title
       - ingredients
       - steps
+      - author
     properties:
       title:
         type: string
